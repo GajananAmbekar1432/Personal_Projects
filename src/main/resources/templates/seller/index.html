@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Ecom Store</title>
+</head>
+<body>
+	<section>
+		<div class="container p-5">
+			<p class="text-center fs-3 mt-4">Seller Dashboard</p>
+			<div class="row p-5">
+				<!-- For Mobile: 2 Cards in a Row; For Desktop: 1 Card in a Column -->
+				<div class="col-6 col-md-3 mt-2">
+					<a href="/seller/loadAddProduct" class="text-decoration-none">
+						<div class="card card-sh h-100">
+							<div class="card-body text-center text-primary">
+								<i class="fa-solid fa-square-plus fa-3x"></i>
+								<h4>Add Product</h4>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="col-6 col-md-3 mt-2">
+					<a href="/seller/products" class="text-decoration-none">
+						<div class="card card-sh h-100">
+							<div class="card-body text-center text-success">
+								<i class="fa-solid fa-table-list fa-3x"></i>
+								<h4>View Product</h4>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="col-6 col-md-3 mt-2">
+					<a href="/seller/orders" class="text-decoration-none">
+						<div class="card card-sh h-100">
+							<div class="card-body text-center text-warning">
+								<i class="fa-solid fa-box-open fa-3x"></i>
+								<h4>Orders</h4>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="col-6 col-md-3 mt-4">
+					<a href="/seller/profile" class="text-decoration-none">
+						<div class="card card-sh h-100">
+							<div class="card-body text-center text-warning">
+								<i class="fa-solid fa-circle-user fa-3x"></i>
+								<h4>Profile</h4>
+							</div>
+						</div>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</section>
+</body>
+</html>

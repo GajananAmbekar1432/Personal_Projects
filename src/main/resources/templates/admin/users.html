@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Manage Users</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+	<section>
+		<div class="container mt-5 p-3">
+			<div class="card">
+				<div class="card-header text-center">
+					<!-- Buttons for toggling user type -->
+					<div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+						<a th:href="@{'/admin/users?type=1'}" class="btn btn-primary btn-sm">Customers</a>
+						<a th:href="@{'/admin/users?type=2'}" class="btn btn-secondary btn-sm">Sellers</a>
+						<a th:href="@{'/admin/users?type=3'}" class="btn btn-success btn-sm">Admins</a>
+					</div>
+					
+					<!-- Dynamic Header -->
+					<h5 class="fw-bold" th:if="${userType==1}">Customers</h5>
+					<h5 class="fw-bold" th:if="${userType==2}">Sellers</h5>
+					<h5 class="fw-bold" th:if="${userType==3}">Admins</h5>
+
+					<!-- Success and Error Messages -->
+					<div th:if="${session.succMsg}" class="text-success fw-bold">
+						[[${session.succMsg}]]
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+					<div th:if="${session.errorMsg}" class="text-danger fw-bold">
+						[[${session.errorMsg}]]
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+				</div>
+				
+				<div class="card-body">
+					<!-- Responsive Table -->
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead class="table-light">
+								<tr>
+									<th scope="col">Sr.No</th>
+									
+									<th scope="col">Name</th>
+									<th scope="col">Email</th>
+									<th scope="col">Mobile No</th>
+									<th scope="col">Address</th>
+									<th scope="col">Status</th>
+									<th scope="col">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="u, c : ${users}">
+									<th scope="row">[[${c.count}]]</th>
+									
+									<td>[[${u.name}]]</td>
+									<td>[[${u.email}]]</td>
+									<td>[[${u.mobileNumber}]]</td>
+									<td>[[${u.address + ', ' + u.city + ', ' + u.state + ', ' + u.pincode}]]</td>
+									<td>
+										<span th:text="${u.isEnable ? 'Active' : 'Inactive'}"></span>
+									</td>
+									<td>
+										<div class="d-flex gap-2">
+											<a th:href="@{'/admin/updateSts?status=true&id=' + ${u.id}} + '&type=' + ${userType}"
+												class="btn btn-sm btn-outline-primary">Activate</a>
+											<a th:href="@{'/admin/updateSts?status=false&id=' + ${u.id}} + '&type=' + ${userType}"
+												class="btn btn-sm btn-outline-danger">Deactivate</a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

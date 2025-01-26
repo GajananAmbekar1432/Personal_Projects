@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+
+
+<title>Ecom Store</title>
+
+<style>
+    .object-cover {
+      object-fit: cover; /* Fills the container and may crop the image */
+         
+    }
+
+    .object-contain {
+      object-fit: contain; /* Ensures the whole image fits within the container */
+
+
+    }
+
+
+  </style>
+</head>
+<body >
+	<section>
+
+        <style>
+            /* Styles for the Category Scroller */
+
+            a{
+                font-size: 1rem;
+                
+            }
+            .category-scroller {
+                display: flex;
+                justify-content: space-evenly;
+                /* gap: 1rem; */
+               
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding: 1rem ;
+            }
+        
+            .category-scroller::-webkit-scrollbar {
+                display: none;
+            }
+        
+            .category-scroller .card-body {
+                flex: 0 0 auto;
+                scroll-snap-align: center;
+                text-align: center;
+                margin-top: 40px;
+               
+            }
+        
+            .category-scroller img {
+                object-fit: contain;
+            }
+        
+            /* Mobile-specific styling */
+            @media (max-width: 991px) {
+                .category-scroller {
+                    padding: 0.3rem;
+                    gap: 0.8rem;
+
+                    /* margin-left: 10px; */
+
+                    
+                    
+                }
+        
+                .category-scroller .card-body {
+                    flex: 0 0 auto;
+                    width: 80px; /* Adjust based on your design */
+
+                }
+        
+                .category-scroller a {
+                    font-size: 0.645rem;
+                    font-weight: 900;
+                   
+                }
+            }
+        </style>
+        
+        <!-- Start Category Module -->
+        <div class="container bg-white mt-4">
+            <div class="row">
+                <div class="category-scroller">
+                    <div class="col-md-1" th:each="c : ${category}">
+                        <div>
+                            <div class="card-body">
+                                <a th:href="@{'/products?category=' + ${c.name}}">
+                                    <img th:src="${c.imageName}" width="60rem" height="60rem"
+                                        class="img-fluid border border-2 border-dark rounded-circle">
+                                </a>
+                                <br>
+                                <a th:href="@{'/products?category=' + ${c.name}}" class="text-decoration-none"
+                                    style=" color: #2b2424; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;">[[${c.name}]]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+		<!-- End Category Module -->
+
+
+<!-- Start Slider  -->
+
+<style>
+    @media (max-width: 800px) {
+        #carouselExample img {
+            width: 100%; /* Maintain full width */
+            height: 200px; /* Reduce height for mobile view */
+            object-fit: fill;
+        }
+    }
+</style>
+
+<div id="carouselExample" class="carousel slide mt-2 shadow-sm bg-body-tertiary px-1" data-bs-ride="carousel" data-bs-interval="1500">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/2/12_4.jpg" class="d-block w-100" alt="..." height="350px">
+        </div>
+        <div class="carousel-item">
+            <img src="https://ethnicity.in/cdn/shop/files/WhatsApp_Image_2024-12-06_at_1.42.35_PM_1024x1024.jpg?v=1733552898%22%20alt=%22%22%20class=%22rimage__imag" class="d-block w-100" alt="..." height="350px">
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/9/_/9_8.jpg" class="d-block w-100" alt="..." height="350px">
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/0/10_5.jpg" class="d-block w-100" alt="..." height="350px">
+        </div>
+         
+        <div class="carousel-item">
+            <img src="//ethnicity.in/cdn/shop/files/ET_Discount_Banner_NEW_copy_1_1024x1024.jpg?v=1724157395" class="d-block w-100" alt="..." height="350px">
+        </div>
+
+
+        <div class="carousel-item">
+            <img src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/1/11_14.jpg" class="d-block w-100" alt="..." height="350px">
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/1/11_4.jpg" class="d-block w-100" alt="..." height="350px">
+        </div>
+
+       
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<!-- End Slider  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- Start Latest Product Module -->
+
+    <style>
+        /* Base Styles for Product Cards */
+        .productSlider {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 1rem 0;
+        }
+    
+        .productSlider::-webkit-scrollbar {
+            display: none;
+        }
+    
+        .productSlider .product-card {
+            flex: 0 0 230px;
+            height: 340px;
+            scroll-snap-align: start;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+    
+        .product-card img {
+            width: 90%;
+            height: 270px;
+            padding-top: 5px;
+            display: block;
+            margin: auto;
+            object-fit: fill;
+            object-position: top;
+            transition: transform 0.3s ease;
+        }
+    
+        .product-card .info {
+            padding: 0.5rem;
+            background: #fff;
+            text-align: center;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+    
+        .product-card:hover .info {
+            transform: translateY(-10px);
+        }
+    
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+    
+        .product-card p {
+            margin: 0.2rem 0;
+        }
+    
+        .product-card .title {
+            font-size: 12px;
+            font-weight: bold;
+        }
+    
+        .product-card .discount {
+            font-size: 12px;
+            font-weight: 500;
+            color: #28a745;
+        }
+    
+        /* Media Query for Mobile Screens */
+        @media (max-width: 800px) {
+            .productSlider .product-card {
+                flex: 0 0 45%; /* Adjusting card width to fit two cards */
+            }
+
+            .product-card:hover .info {
+            transform: translateY(-10px);
+        }
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+            .productSlider{
+                gap: 1.5rem;
+            }
+
+            .product-card img {
+                width: 100%;
+                height: 220px;
+            }
+
+            .productSlider .product-card {
+          
+            height: 290px;
+            transition: transform 0.3s ease;
+           
+            
+        }
+        .product-card .info {
+            padding: 0.8rem;
+            background: #fff;
+            text-align: center;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+    
+        .arrow-btn, .leftArrow, .rightArrow {
+        display: none !important;
+    }
+
+
+        }
+    
+        /* Arrow Button Styling */
+        .arrow-btn {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    
+        .leftArrow {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            color: black;
+            transform: translateY(-50%);
+        }
+    
+        .rightArrow {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            color: black;
+            transform: translateY(-50%);
+        }
+    </style>
+    
+    
+    <div class="container-fluid mt-4">
+        <div class="position-relative">
+            <p class="fs-4 m-2">Latest Men's Clothing</p>
+    
+            <!-- Left Arrow -->
+            <button class="arrow-btn btn-primary position-absolute leftArrow" >
+                &lt;
+            </button>
+    
+            <!-- Horizontal Scroll Container -->
+            <div class="productSlider" >
+                <!-- Product Card -->
+                <div class="product-card" th:each="p : ${products}" th:if="${p.category == 'Mens_Clothing'}">
+                    <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                        <img th:src="${p.image}" alt="Product Image">
+                        <div class="info">
+                            <p class="title">[[${p.title}]]</p>
+                            <p class="discount">Upto [[${p.discount}]]% off</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+    
+            <!-- Right Arrow -->
+            <button class="arrow-btn btn-primary position-absolute rightArrow" >
+                &gt;
+            </button>
+        </div>
+    </div>
+    
+    
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Woman -->
+
+
+<div class="container-fluid mt-4">
+    <div class="position-relative">
+        <p class="fs-4 m-2">Latest Woman's Clothing</p>
+
+        <!-- Left Arrow -->
+        <button class="arrow-btn btn-primary position-absolute leftArrow" >
+            &lt;
+        </button>
+
+        <!-- Horizontal Scroll Container -->
+        <div class="productSlider" >
+            <!-- Product Card -->
+            <div class="product-card" th:each="p : ${products}" th:if="${p.category == 'Womans_Clothing'}">
+                <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                    <img th:src="${p.image}" alt="Product Image">
+                    <div class="info">
+                        <p class="title">[[${p.title}]]</p>
+                        <p class="discount">Upto [[${p.discount}]]% off</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="arrow-btn btn-primary position-absolute rightArrow" >
+            &gt;
+        </button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- Men's Footwear -->
+
+<div class="container-fluid mt-4">
+    <div class="position-relative">
+        <p class="fs-4 m-2">Latest Men's Footwears</p>
+
+        <!-- Left Arrow -->
+        <button class="arrow-btn btn-primary position-absolute leftArrow" >
+            &lt;
+        </button>
+
+        <!-- Horizontal Scroll Container -->
+        <div class="productSlider" >
+            <!-- Product Card -->
+            <div class="product-card" th:each="p : ${products}" th:if="${p.category == 'Men_Footwears'}">
+                <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                    <img th:src="${p.image}" alt="Product Image">
+                    <div class="info">
+                        <p class="title">[[${p.title}]]</p>
+                        <p class="discount">Upto [[${p.discount}]]% off</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="arrow-btn btn-primary position-absolute rightArrow" >
+            &gt;
+        </button>
+    </div>
+</div>
+
+
+
+
+   <!-- Electronics -->
+
+   <div class="container-fluid mt-4">
+    <div class="position-relative">
+        <p class="fs-4 m-2">Latest Electronics Gadgets</p>
+
+        <!-- Left Arrow -->
+        <button class="arrow-btn btn-primary position-absolute leftArrow" >
+            &lt;
+        </button>
+
+        <!-- Horizontal Scroll Container -->
+        <div class="productSlider" >
+            <!-- Product Card -->
+            <div class="product-card" th:each="p : ${products}" th:if="${p.category == 'Electronics'}">
+                <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                    <img th:src="${p.image}" alt="Product Image">
+                    <div class="info">
+                        <a th:href="@{'/product/' + ${p.id}}" class="title">[[${p.title}]]</a>
+                        <p class="discount">Upto [[${p.discount}]]% off</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="arrow-btn btn-primary position-absolute rightArrow" >
+            &gt;
+        </button>
+    </div>
+</div>
+
+
+
+<!-- woman footwear -->
+
+<div class="container-fluid mt-4">
+    <div class="position-relative">
+        <p class="fs-4 m-2">Latest Woman's Footwears</p>
+
+        <!-- Left Arrow -->
+        <button class="arrow-btn btn-primary position-absolute leftArrow" >
+            &lt;
+        </button>
+
+        <!-- Horizontal Scroll Container -->
+        <div class="productSlider" >
+            <!-- Product Card -->
+            <div class="product-card" th:each="p : ${products}" th:if="${p.category == 'Woman_Footwears'}">
+                <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                    <img th:src="${p.image}" alt="Product Image">
+                    <div class="info">
+                        <p class="title">[[${p.title}]]</p>
+                        <p class="discount">Upto [[${p.discount}]]% off</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="arrow-btn btn-primary position-absolute rightArrow">
+            &gt;
+        </button>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    // Get all product slider elements
+    const productSliders = document.querySelectorAll('.productSlider');
+
+    // Function to scroll left
+    function scrollLeft(slider) {
+        slider.scrollBy({
+            left: -250, // Adjust the value to control the scroll distance
+            behavior: 'smooth'
+        });
+    }
+
+    // Function to scroll right
+    function scrollRight(slider) {
+        slider.scrollBy({
+            left: 250, // Adjust the value to control the scroll distance
+            behavior: 'smooth'
+        });
+    }
+
+    // Add event listeners to the arrow buttons for each slider
+    const leftArrows = document.querySelectorAll('.leftArrow');
+    const rightArrows = document.querySelectorAll('.rightArrow');
+
+    // Loop through each slider and add the corresponding event listeners
+    productSliders.forEach((slider, index) => {
+        // Find the corresponding arrows for this slider by index
+        const leftArrow = leftArrows[index];
+        const rightArrow = rightArrows[index];
+
+        // Add event listeners to the left and right arrows
+        if (leftArrow && rightArrow) {
+            leftArrow.addEventListener('click', () => scrollLeft(slider));
+            rightArrow.addEventListener('click', () => scrollRight(slider));
+        }
+    });
+</script>
+
+
+<style>
+    .arrow-btn {
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+        border: none; /* Remove border */
+        border-radius: 15%;
+        width: 2rem; /* Keeping the same width */
+        height: 4rem; /* Keeping the same height */
+        display: flex;
+		font-weight: bolder;
+        font-size: 1.2rem;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        cursor: pointer;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .arrow-btn:hover {
+        background-color: rgba(255, 255, 255, 1); /* Full opacity on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    }
+
+
+</style>
+
+
+
+		<!-- End Latest Product Module -->
+	</section>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

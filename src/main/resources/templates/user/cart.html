@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Ecom Store</title>
+</head>
+<body>
+	<section>
+		<style>
+			@media (max-width: 768px) {
+				table img {
+					width: 50px;
+					height: 50px;
+				}
+		
+				.table th, .table td {
+					font-size: 0.9rem;
+				}
+		
+				.btn-warning {
+					font-size: 0.9rem;
+					padding: 0.5rem 1rem;
+				}
+			}
+		
+			@media (max-width: 576px) {
+				.card-header p {
+					font-size: 1.2rem;
+				}
+		
+				.btn-warning {
+					width: 100%;
+				}
+		
+				/* Add horizontal scroll for table */
+				.table-responsive {
+					overflow-x: auto;
+					-webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+				}
+		
+				table {
+					min-width: 600px; /* Ensure table doesn't collapse too much */
+				}
+			}
+		</style>
+		
+		<div class="container-fluid mt-5">
+
+			<div class="card card-sh">
+				<div class="card-header text-center">
+					<p class="fs-4"> My Cart</p>
+					<th:block th:if="${session.succMsg}">
+						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+					</th:block>
+
+					<th:block th:if="${session.errorMsg}">
+						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+					</th:block>
+				</div>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Sr No</th>
+								<th scope="col">Image</th>
+								<th scope="col">Product Name</th>
+								<th scope="col">Price</th>
+								<th scope="col" class="text-center">Quantity</th>
+								<th scope="col">Total Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="cart,c:${carts}">
+								<th scope="row">[[${c.count}]]</th>
+								<td><img
+									th:src="${cart.product.image}"
+									width="70px" height="70px"></td>
+								<td>[[${cart.product.title}]]</td>
+								<td>[[${cart.product.discountPrice}]]</td>
+								<td class="text-center"><a
+									th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}">
+										<i class="fa-solid fa-minus"></i>
+								</a> [ [[${cart.quantity}]] ] <a
+									th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}">
+										<i class="fa-solid fa-plus"></i>
+								</a></td>
+								<td>[[${cart.totalPrice}]]</td>
+							</tr>
+							<tr>
+								<td colspan="4"></td>
+								<td class="fw-bold">Total Price</td>
+								<td class="fw-bold">&#8377; [[${totalOrderPrice}]]</td>
+							</tr>
+
+						</tbody>
+					</table>
+					
+				</div>
+					<!-- Show Proceed Payment button if items are in cart -->
+					<th:block th:if="${totalOrderPrice > 0}">
+						<div class="text-center">
+							<a href="/user/orders" class="btn btn-warning  fs-6">Place Orders</a>
+						</div>
+					</th:block>
+
+					
+
+			</div>
+		</div>
+
+	</section>
+</body>
+</html>

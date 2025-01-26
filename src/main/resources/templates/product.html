@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Ecom Store</title>
+</head>
+<body>
+    <section>
+        <!-- Search Bar -->
+		<div class="container-fluid bg-primary p-4  mt-5">
+			<div class="row justify-content-center">
+			  <div class="col-12 col-md-6 search">
+				<form action="/products" method="get">
+				  <div class="input-group">
+				<div>	<input
+					  type="text"
+					  class="form-control"
+					  name="ch"
+					  placeholder="Search..."
+					/></div>
+					<div>
+					<button class="btn btn-warning text-dark" type="submit">
+					  <i class="fa-solid fa-magnifying-glass"></i> 
+					</button>
+				</div>
+				  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		  
+		
+		
+
+        <!-- Main Content -->
+        <div class="container-fluid mt-1">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 p-0 d-none d-md-block">
+                    <div class="card shadow-sm p-0 mb-5 bg-body-tertiary rounded">
+                        <div class="card-body">
+                            <div class="list-group">
+                                <p class="fs-5">Category</p>
+                                <a href="/products" th:classappend="${paramValue == ''} ? 'active':''" 
+                                   class="list-group-item list-group-item-action">All</a>
+                                <a th:each="c : ${categories}" 
+                                   th:href="@{'/products?category=' + ${c.name} + '&pageNo=0&pageSize=12'}" 
+                                   th:classappend="${paramValue == c.name} ? 'active':''" 
+                                   class="list-group-item list-group-item-action">[[${c.name}]]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Cards -->
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- <p class="fs-3 text-center heading">Products</p> -->
+                            <div class="row product-container">
+                                <th:block th:if="${productsSize > 0}">
+                                    <div class="product-card" th:each="p : ${products}">
+                                        <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                                            <img th:src="${p.image}" alt="Product Image">
+                                            <div class="info">
+                                                <p class="title">[[${p.title}]]</p>
+                                                <p class="price">
+													Just &#8377;[[${p.discountPrice}]]<br>
+													<span class="text-decoration-line-through text-secondary" >
+														&#8377;[[${p.price}]] 
+													</span>
+													<span class="text-success m" >
+														[[${p.discount}]]% off
+													</span>
+												</p>
+												
+                                            </div>
+                                        </a>
+                                    </div>
+                                </th:block>
+                                <th:block th:unless="${productsSize > 0}">
+                                    <p class="fs-4 text-center mt-4 text-danger">Product not available</p>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="row">
+                        <div class="col-md-4">Total Products: [[${totalElements}]]</div>
+                        <div class="col-md-6">
+                            <th:block th:if="${productsSize > 0}">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li class="page-item" th:classappend="${isFirst} ? 'disabled':''">
+                                            <a class="page-link" 
+                                               th:href="@{'/products?category=' + ${paramValue} + '&pageNo=' + ${pageNo - 1} + '&pageSize=' + ${pageSize}}" 
+                                               aria-label="Previous">&laquo;</a>
+                                        </li>
+                                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
+                                            class="page-item" 
+                                            th:classappend="${pageNo == i} ? 'active':''">
+                                            <a class="page-link" 
+                                               th:href="@{'/products?category=' + ${paramValue} + '&pageNo=' + ${i} + '&pageSize=' + ${pageSize}}">[[${i + 1}]]</a>
+                                        </li>
+                                        <li class="page-item" th:classappend="${isLast} ? 'disabled':''">
+                                            <a class="page-link" 
+                                               th:href="@{'/products?category=' + ${paramValue} + '&pageNo=' + ${pageNo + 1} + '&pageSize=' + ${pageSize}}" 
+                                               aria-label="Next">&raquo;</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<style>
+
+/* search bar */
+
+	
+.input-group .form-control {
+				width:41.67vw ; /* Increased width for desktop view */
+				border-radius: 0.25rem 0 0 0.25rem; /* Rounded corners for input field */
+			}
+		
+			.input-group .btn {
+				border-radius: 0 0.25rem 0.25rem 0; /* Rounded corners for button */
+
+				padding-left: 20px;
+				padding-right: 20px;
+			}
+		
+			
+		
+			.input-group button {
+				width: 100%;
+			}
+		
+			.input-group input {
+				width: 100%; /* Full width on mobile */
+			}
+
+
+/* Base Styles for Product Cards (Desktop View) */
+.product-container {
+  display: flex;
+  flex-wrap: wrap; /* Ensures wrapping of cards */
+  gap: 25px; /* Adds gap between cards */
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.product-card {
+  flex: 0 0 250px;
+ 
+  height: 400px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.product-card img {
+  width: 95%;
+  height: 300px;
+  padding-top: 5px;
+  display: block;
+  margin: auto;
+  object-fit: fill;
+  object-position: top;
+  transition: transform 0.3s ease;
+}
+
+.product-card .info {
+  padding: 0.5rem 1rem;
+  width: 100%;
+ height: 80px;
+  background: #fff;
+  color: black;
+  text-align: center;
+ /* Adjusted to provide space */
+  margin: 0 auto; /* Centers the info box */
+  border-top: 0.2px solid white;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .info {
+  transform: translateY(-10px);
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-card .title {
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(34, 31, 31);
+  font-family: monospace;
+  margin: 5px 0;
+}
+
+.product-card .price {
+  font-family: serif;
+  font-weight: 600;
+  
+}
+
+.product-card .discount {
+  font-size: 10px;
+  color: #28a745;
+  
+
+  
+}
+.m {
+				margin-left: 10px;
+			}
+
+/* Mobile View (Max Width 800px) */
+@media (max-width: 800px) {
+  .product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px; /* Adjust gap for mobile view */
+    margin-left: 0;
+  }
+
+  .product-card {
+    flex: 0 0 48%; /* Two cards per row */
+    height: auto; /* Allow cards to adjust height dynamically */
+    margin-bottom: 15px;
+    margin-left: 0;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 200px;
+  }
+
+  .card {
+					border-style: none;
+					margin: 0;
+					padding: 0;
+				}
+		
+
+  .product-card .info {
+    padding: 0.8rem;
+    background: #fff;
+    text-align: start;
+    width: 100%; /* Full width on mobile */
+    height: auto; /* Allow height to adjust */
+  }
+
+
+
+
+  .input-group button {
+					width: 100%;
+				}				.input-group {
+					display: flex;
+					flex-direction: row;
+				}
+		
+				.form-control {
+					width: 75%;
+					font-size: 14px;
+				}
+				.btn {
+					font-size: 16px;
+					padding: 0.3rem 1rem;
+				}
+		
+				.m {
+					margin-left: 5px;
+				}
+				.input-group .form-control{
+				width: 70.67vw;
+			 }
+
+
+
+
+
+
+
+
+}
+</style>
+		
+		
+		
+    </section>
+</body>
+</html>

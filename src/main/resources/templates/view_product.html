@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Product Details</title>
+</head>
+<body>
+    <section>
+        <style>
+            .img1 {
+                width: 18.95rem;
+                height: 28.526rem;
+                margin-right: 40px;
+            }
+        
+            .container.card-sh {
+                margin-top: 90px;
+                margin-bottom: 110px;
+                padding: 10px;
+            }
+        
+            @media (max-width: 800px) {
+                /* Adjust container spacing */
+                .container.card-sh {
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                }
+        
+                /* Adjust .img1 size */
+                .img1 {
+                    width: 100%; /* Make image responsive to container width */
+                    height: auto; /* Maintain aspect ratio */
+                    padding-top: 50px;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                    margin: 0;
+                }
+        
+                /* Image adjustments */
+                .col-md-6.text-end  {
+                    width: 100%; /* Full width on smaller screens */
+                    height: auto; /* Maintain aspect ratio */
+                    margin: 0;
+                    align-items: center;
+                   
+                }
+        
+                /* Text section adjustments */
+                .col-md-6 {
+                    padding: 15px;
+                    
+                }
+        
+                .col-md-6 p {
+                    font-size: 1rem;
+                }
+        
+                /* Price and discount details */
+                .fs-5 {
+                    font-size: 1.2rem;
+                }
+        
+                .fs-6 {
+                    font-size: 0.9rem;
+                }
+        
+                /* Features section adjustments for a single horizontal row */
+                .row.features-section {
+                    display: flex;
+                    flex-direction: row; /* Horizontal layout */
+                    justify-content: space-around; /* Evenly space the items */
+                    align-items: center;
+                    gap: 10px; /* Add space between items */
+                    margin-top: 15px;
+                }
+        
+                .row.features-section .col-md-4 {
+                    flex: 1; /* Make items flexible */
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                }
+        
+                .row.features-section .col-md-4 i {
+                    font-size: 1.5rem;
+                    margin-bottom: 5px;
+                }
+        
+                .row.features-section .col-md-4 p {
+                    margin-bottom: 20px;
+                    margin-top: 10px;
+                    font-size: 0.9rem;
+                }
+        
+                /* Buttons adjustments */
+                .btn {
+                    font-size: 1rem;
+                    padding: 10px;
+                    /* margin-top: 2px; */
+                }
+        
+                .btn-danger,
+                .btn-warning {
+                    width: 100%; /* Full width for buttons */
+                    margin-bottom: 10px;
+                }
+            }
+        </style>
+        
+        
+        
+        
+
+        <div class="container card-sh" >
+            <div class="col-md-12 ">
+                <div class="row">
+                    <th:block th:if="${session.succMsg}">
+                        <p class="text-success alert alert-success text-center" role="alert">[[${session.succMsg}]]</p>
+                        <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                    </th:block>
+
+                    <th:block th:if="${session.errorMsg}">
+                        <p class="text-danger text-center alert alert-danger">[[${session.errorMsg}]]</p>
+                        <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                    </th:block>
+
+                    <div class="col-md-6 text-end">
+                        <img alt="" th:src="${product.image}" class="img1">
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <p class="fs-3">[[${product.title}]]</p>
+                        <p>
+                            <span class="fw-bold">Description: </span><br>[[${product.description}]]
+                        </p>
+                        <p>
+                            <span class="fw-bold">Product Details: </span> <br> 
+                            Status:
+                            <th:block th:if="${product.stock > 0}">
+                                <span class="badge bg-success">Available</span>
+                            </th:block>
+                            <th:block th:unless="${product.stock > 0}">
+                                <span class="badge bg-warning">Out of stock</span>
+                            </th:block>
+                            <br> 
+                            Category: [[${product.category}]]<br> 
+                            Policy: 7 Days Replacement & Return
+                        </p>
+                        <p class="fs-5 fw-bold">
+                            Price: &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-rupee-sign"></i> [[${product.discountPrice}]] 
+                            <span class="fs-6 text-decoration-line-through text-secondary">[[${product.price}]]</span>
+                            <span class="fs-6 text-success">[[${product.discount}]]% off</span>
+                        </p>
+
+                        <div class="row features-section mb-2">
+                            <div class="col-md-4 text-success text-center mt-2">
+                                <i class="fas fa-money-bill-wave fa-2x"></i>
+                                <p>Cash On Delivery</p>
+                            </div>
+                            <div class="col-md-4 text-danger text-center mt-2">
+                                <i class="fas fa-undo-alt fa-2x"></i>
+                                <p>Return Available</p>
+                            </div>
+                            <div class="col-md-4 text-primary text-center mt-2">
+                                <i class="fas fa-truck-moving fa-2x"></i>
+                                <p>Free Shipping</p>
+                            </div>
+                        </div>
+                        
+
+                        <th:block th:if="${product.stock > 0}">
+                            <th:block th:if="${user == null}">
+                                <a href="/signin" class="btn btn-danger col-md-12">Add To Cart</a>
+                            </th:block>
+                            <th:block th:unless="${user == null}">
+                                <div class="text-center">
+                                <a th:href="@{'/user/addCart?pid=' + ${product.id} + '&uid=' + ${user.id}}"
+                                   class="btn btn-danger col-md-12 mb-2 ">Add To Cart</a>
+                                
+                                    <a th:href="@{'/user/buyNow?pid=' + ${product.id} + '&uid=' + ${user.id}}"
+                                       class="btn btn-warning col-md-12">Buy Now</a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${product.stock > 0}">
+                            <a href="#" class="btn text-white btn-warning col-md-12">Out of Stock</a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    
+    <section>
+
+
+        <style>
+            /* Base Styles for Product Cards */
+            .productSlider {
+                display: flex;
+                gap: 2rem;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding: 1rem 0;
+            }
+        
+            .productSlider::-webkit-scrollbar {
+                display: none;
+            }
+        
+            .productSlider .product-card {
+                flex: 0 0 230px;
+                height: 340px;
+                scroll-snap-align: start;
+                background: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                position: relative;
+                transition: transform 0.3s ease;
+            }
+        
+            .product-card img {
+                width: 90%;
+                height: 270px;
+                padding-top: 5px;
+                display: block;
+                margin: auto;
+                object-fit: fill;
+                object-position: top;
+                transition: transform 0.3s ease;
+            }
+        
+            .product-card .info {
+                padding: 0.5rem;
+                background: #fff;
+                text-align: center;
+                height: 80px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                transition: transform 0.3s ease;
+            }
+        
+            .product-card:hover .info {
+                transform: translateY(-10px);
+            }
+        
+            .product-card:hover img {
+                transform: scale(1.05);
+            }
+        
+            .product-card p {
+                margin: 0.2rem 0;
+            }
+        
+            .product-card .title {
+                font-size: 12px;
+                font-weight: bold;
+            }
+        
+            .product-card .discount {
+                font-size: 10px;
+                color: #28a745;
+            }
+        
+            /* Media Query for Mobile Screens */
+            @media (max-width: 800px) {
+                .productSlider .product-card {
+                    flex: 0 0 45%; /* Adjusting card width to fit two cards */
+                }
+                .productSlider{
+                    gap: 1.5rem;
+                }
+    
+                .product-card img {
+                    width: 100%;
+                    height: 220px;
+                }
+    
+                .productSlider .product-card {
+              
+                height: 290px;
+                transition: transform 0.3s ease;
+               
+                
+            }
+            .product-card .info {
+                padding: 0.8rem;
+                background: #fff;
+                text-align: center;
+                height: 80px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                transition: transform 0.3s ease;
+            }
+        
+             .arrow-btn, .leftArrow, .rightArrow{
+                display: none !important;
+             }
+           
+          
+    
+    
+            }
+        
+            /* Arrow Button Styling */
+            .arrow-btn {
+                background-color: white;
+                color: black;
+                border: none;
+                padding: 10px;
+                font-size: 18px;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        
+            .leftArrow {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                color: black;
+                transform: translateY(-50%);
+            }
+        
+            .rightArrow {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                color: black;
+                transform: translateY(-50%);
+            }
+        </style>
+        
+        
+        <div class="container-fluid mt-4">
+            <div class="position-relative">
+                <p class="fs-4 m-2">Similar Products</p>
+        
+                <!-- Left Arrow -->
+                <button class="arrow-btn btn-primary position-absolute leftArrow" >
+                    &lt;
+                </button>
+        
+                <!-- Horizontal Scroll Container -->
+                <div class="productSlider" >
+                    <!-- Product Card -->
+                    <div class="product-card" th:each="p : ${products}" th:if="${p.category ==product.category}">
+                        <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                            <img th:src="${p.image}" alt="Product Image">
+                            <div class="info">
+                                <p class="title">[[${p.title}]]</p>
+                                <p class="discount">Upto [[${p.discount}]]% off</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+        
+                <!-- Right Arrow -->
+                <button class="arrow-btn btn-primary position-absolute rightArrow" >
+                    &gt;
+                </button>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="container-fluid mt-4">
+            <div class="position-relative">
+                <p class="fs-4 m-2">Brought Together</p>
+        
+                <!-- Left Arrow -->
+                <button class="arrow-btn btn-primary position-absolute leftArrow" >
+                    &lt;
+                </button>
+        
+                <!-- Horizontal Scroll Container -->
+                <div class="productSlider" >
+                    <!-- Product Card -->
+                    <div class="product-card"  th:each="p : ${products}" 
+                    th:if="${(product.category == 'Mens_Clothing' and p.category == 'Men_Footwears') or 
+                    (product.category == 'Womans_Clothing' and p.category == 'Woman_Footwears') or 
+                    (product.category == 'Men_Footwears' and p.category == 'Mens_Clothing') or 
+                    (product.category == 'Woman_Footwears' and p.category == 'Womans_Clothing')}">
+                        <a th:href="@{'/product/' + ${p.id}}" class="text-decoration-none">
+                            <img th:src="${p.image}" alt="Product Image">
+                            <div class="info">
+                                <p class="title">[[${p.title}]]</p>
+                                <p class="discount">Upto [[${p.discount}]]% off</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+        
+                <!-- Right Arrow -->
+                <button class="arrow-btn btn-primary position-absolute rightArrow" >
+                    &gt;
+                </button>
+            </div>
+        </div>
+
+
+
+
+
+      
+
+
+
+
+     
+        
+
+        <script>
+            // Get all product slider elements
+            const productSliders = document.querySelectorAll('.productSlider');
+        
+            // Function to scroll left
+            function scrollLeft(slider) {
+                slider.scrollBy({
+                    left: -250, // Adjust the value to control the scroll distance
+                    behavior: 'smooth'
+                });
+            }
+        
+            // Function to scroll right
+            function scrollRight(slider) {
+                slider.scrollBy({
+                    left: 250, // Adjust the value to control the scroll distance
+                    behavior: 'smooth'
+                });
+            }
+        
+            // Add event listeners to the arrow buttons for each slider
+            const leftArrows = document.querySelectorAll('.leftArrow');
+            const rightArrows = document.querySelectorAll('.rightArrow');
+        
+            // Loop through each slider and add the corresponding event listeners
+            productSliders.forEach((slider, index) => {
+                // Find the corresponding arrows for this slider by index
+                const leftArrow = leftArrows[index];
+                const rightArrow = rightArrows[index];
+        
+                // Add event listeners to the left and right arrows
+                if (leftArrow && rightArrow) {
+                    leftArrow.addEventListener('click', () => scrollLeft(slider));
+                    rightArrow.addEventListener('click', () => scrollRight(slider));
+                }
+            });
+        </script>
+
+<style>
+    .arrow-btn {
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+        border: none; /* Remove border */
+        border-radius: 15%;
+        width: 2rem; /* Keeping the same width */
+        height: 4rem; /* Keeping the same height */
+        display: flex;
+		font-weight: bolder;
+        font-size: 1.2rem;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        cursor: pointer;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .arrow-btn:hover {
+        background-color: rgba(255, 255, 255, 1); /* Full opacity on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    }
+
+
+</style>
+
+
+    </section>
+    
+
+
+
+
+
+
+</body>
+</html>
